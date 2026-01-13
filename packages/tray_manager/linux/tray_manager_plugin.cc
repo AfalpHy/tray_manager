@@ -194,6 +194,15 @@ void tray_manager_plugin_register_with_registrar(FlPluginRegistrar* registrar) {
   TrayManagerPlugin* plugin = TRAY_MANAGER_PLUGIN(
       g_object_new(tray_manager_plugin_get_type(), nullptr));
 
+  static bool plugin_already_registered = false;
+
+  if (plugin_already_registered) {
+    // Skip registration in subwindow
+    return;
+  }
+
+  plugin_already_registered = true;
+
   plugin->registrar = FL_PLUGIN_REGISTRAR(g_object_ref(registrar));
 
   g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();
